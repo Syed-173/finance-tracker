@@ -141,6 +141,15 @@ Stop the application:
 docker compose down
 ```
 
+## AWS Deployment
+
+The application was deployed on **Amazon ECS** using containerized services.
+
+* Spring Boot application and MySQL were deployed as separate containers.
+* Docker was used to build and package the application.
+* ECS was used to run the containerized application.
+* The deployment environment is not kept running continuously to avoid ongoing AWS costs.
+
 ## Testing
 
 The project includes unit tests for the main service layers using JUnit 5 and Mockito.
