@@ -1,102 +1,125 @@
-# Personal Finance Tracker
+# Finance Tracker
 
-A backend REST API for managing personal finances, built with Java and Spring Boot. The application supports secure JWT authentication, expense and income tracking, budgeting, notifications, reports, and transaction management.
+A multi-user personal finance management REST API built with **Java 21 and Spring Boot**. The application enables users to manage their income, expenses, categories, budgets, and financial transactions through secure, user-specific APIs.
+
+It includes JWT-based authentication, budget notifications, monthly financial reports, scheduled alert processing, and MySQL persistence.
 
 ## Features
 
-* User registration and JWT-based authentication
-* Secure password hashing with BCrypt
-* User-specific data isolation
-* Expense CRUD operations
-* Income CRUD operations
-* Category management
-* Monthly budgets
-* Automatic budget warning and exceeded notifications
-* Transaction tracking
-* Monthly financial reports
-* Scheduled budget alert processing
-* RESTful APIs
-* Unit testing with JUnit and Mockito
-* Docker and Docker Compose support
-* MySQL database
+### Authentication & Security
+- User registration and login with JWT-based authentication.
+- Secure password hashing using BCrypt.
+- User-specific data access and isolation.
+- Protected API endpoints using Spring Security.
+
+### Financial Management
+- **Expense Management:** Create, retrieve, update, and delete expenses.
+- **Income Management:** Manage income records through REST APIs.
+- **Category Management:** Organize financial records using categories.
+- **Budget Management:** Create and manage monthly budgets.
+- **Transaction Management:** Track financial transactions associated with income and expense operations.
+
+### Reports & Notifications
+- Generate monthly financial reports.
+- Monitor spending against monthly budgets.
+- Automatic budget warning and exceeded notifications.
+- Scheduled processing of budget alerts.
+
+### Development & Testing
+- Layered backend architecture using Controller, Service, and Repository components.
+- MySQL persistence using Spring Data JPA and Hibernate.
+- Unit testing with JUnit 5 and Mockito.
+- Docker and Docker Compose support.
+- Containerized deployment on Amazon ECS.
 
 ## Tech Stack
 
-* **Java 21**
-* **Spring Boot 4**
-* **Spring Security**
-* **JWT**
-* **Spring Data JPA / Hibernate**
-* **MySQL 8**
-* **Maven**
-* **JUnit 5**
-* **Mockito**
-* **Docker / Docker Compose**
-* **Git / GitHub**
+| Category | Technologies |
+|---|---|
+| Language | Java 21 |
+| Framework | Spring Boot 4.1.1 |
+| Security | Spring Security, JWT, BCrypt |
+| Persistence | Spring Data JPA, Hibernate |
+| Database | MySQL 8 |
+| Testing | JUnit 5, Mockito |
+| Build Tool | Maven |
+| Containerization | Docker, Docker Compose |
+| Cloud | Amazon ECS |
+
+## Application Architecture
+
+The application follows a layered architecture to separate request handling, business logic, data access, and security responsibilities.
+
+```text
+Client
+  |
+  v
+REST Controllers
+  |
+  v
+Service Layer
+  |
+  v
+Repository Layer
+  |
+  v
+MySQL Database
+```
+
+- **Controller Layer:** Handles incoming HTTP requests and API responses.
+- **Service Layer:** Contains application business logic and financial operations.
+- **Repository Layer:** Handles database operations through Spring Data JPA.
+- **Security Layer:** Handles JWT authentication and protected resource access.
 
 ## Project Structure
 
 ```text
-src/main/java/com/syed/finance_tracker
-├── Controller
-├── Service
-├── Repository
-├── Dto
-├── Security
-├── config
-└── entity
+src/main/java/com/syed/finance_tracker/
+├── Controller/
+├── Service/
+├── Repository/
+├── Dto/
+├── Security/
+├── config/
+└── entity/
 ```
 
-## Authentication
+## Main API Endpoints
 
-The API uses JWT-based authentication.
+| Module | Endpoint |
+|---|---|
+| User Registration | `POST /users` |
+| Authentication | `POST /auth/login` |
+| Expenses | `/expenses` |
+| Income | `/income` |
+| Categories | `/categories` |
+| Budgets | `/budgets` |
+| Transactions | `/transactions` |
+| Notifications | `/notifications` |
+| Reports | `/reports` |
 
-Typical flow:
+Protected endpoints require a valid JWT access token.
 
-```text
-Register
-   ↓
-Login
-   ↓
-JWT Token
-   ↓
-Authenticated API Requests
-```
-
-Protected endpoints require the JWT token in the request:
-
-```text
-Authorization: Bearer <token>
-```
-
-## Main API Areas
-
-| Area              | Endpoint           |
-| ----------------- | ------------------ |
-| User Registration | `POST /users`      |
-| Login             | `POST /auth/login` |
-| Expenses          | `/expenses`        |
-| Income            | `/income`          |
-| Categories        | `/categories`      |
-| Budgets           | `/budgets`         |
-| Transactions      | `/transactions`    |
-| Notifications     | `/notifications`   |
-| Reports           | `/reports`         |
-
-## Running Locally
+## Getting Started
 
 ### Prerequisites
 
-* Java 21
-* Maven
-* MySQL 8
-* Docker Desktop (optional)
+- Java 21
+- MySQL 8
+- Docker Desktop (optional)
 
-### Configuration
+The project includes Maven Wrapper scripts, so a separate Maven installation is not required.
 
-Sensitive configuration is supplied through environment variables.
+### 1. Clone the Repository
 
-Example:
+```bash
+git clone https://github.com/Syed-173/finance-tracker.git
+cd finance-tracker
+```
+
+### 2. Configure Environment Variables
+
+Configure the following environment variables for your database and JWT authentication:
 
 ```text
 SPRING_DATASOURCE_URL
@@ -105,90 +128,92 @@ SPRING_DATASOURCE_PASSWORD
 JWT_SECRET
 ```
 
-Do not commit `.env` or other files containing real credentials.
+Use your own local database credentials and a secure JWT secret. Do not commit actual credentials or secrets to the repository.
 
-### Run with Maven
+### 3. Run the Application
+
+**Windows PowerShell:**
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-The application runs on:
+**Linux / macOS:**
+
+```bash
+./mvnw spring-boot:run
+```
+
+The application runs at:
 
 ```text
 http://localhost:8080
 ```
 
+Make sure your MySQL database is running and the datasource configuration is correct before starting the application.
+
 ## Running with Docker
 
-Make sure Docker Desktop is running and configure the required environment variables in `.env`.
+Make sure Docker Desktop is running and the required environment variables are configured in your `.env` file.
 
-Then:
+Build and start the containers:
 
-```powershell
+```bash
 docker compose up -d --build
 ```
 
-Check the containers:
+Check running containers:
 
-```powershell
+```bash
 docker compose ps
 ```
 
-Stop the application:
+Stop the containers:
 
-```powershell
+```bash
 docker compose down
 ```
 
-## AWS Deployment
+The application and MySQL are configured as separate containers.
 
-The application was deployed on **Amazon ECS** using containerized services.
+## Running Tests
 
-* Spring Boot application and MySQL were deployed as separate containers.
-* Docker was used to build and package the application.
-* ECS was used to run the containerized application.
-* The deployment environment is not kept running continuously to avoid ongoing AWS costs.
+Execute the test suite using the Maven Wrapper:
 
-## Testing
-
-The project includes unit tests for the main service layers using JUnit 5 and Mockito.
-
-Run the tests with:
+**Windows:**
 
 ```powershell
 .\mvnw.cmd test
 ```
 
-## Database
+**Linux / macOS:**
 
-The application uses MySQL with Spring Data JPA and Hibernate.
-
-For local development, the database schema is automatically updated using:
-
-```text
-spring.jpa.hibernate.ddl-auto=update
+```bash
+./mvnw test
 ```
 
-## Security
+The project uses JUnit 5 and Mockito for unit testing of core service-layer functionality.
 
-* Passwords are stored using BCrypt hashing.
-* JWT authentication protects application endpoints.
-* Users can access only their own financial data.
-* Database credentials and JWT secrets are provided through environment variables.
+## AWS Deployment
+
+The application was deployed on **Amazon Elastic Container Service (ECS)** using Docker containers.
+
+- The Spring Boot application and MySQL database were deployed as separate containers.
+- Docker was used to package the application.
+- Amazon ECS was used to run the containerized services.
+- The deployment environment is not kept running continuously to avoid ongoing AWS costs.
 
 ## Future Improvements
 
-* Production deployment on AWS
-* CI/CD pipeline
-* Improved API documentation with OpenAPI/Swagger
-* Production database configuration
-* Monitoring and logging improvements
-* Additional integration tests
+- Introduce a CI/CD pipeline.
+- Improve API documentation with OpenAPI/Swagger.
+- Strengthen production database configuration.
+- Expand integration testing.
+- Improve application monitoring and logging.
 
 ## Author
 
 **Syed Sohaib**
 
-B.E. Computer Science
-Hyderabad, India
+- [GitHub](https://github.com/Syed-173)
+- [LinkedIn](https://linkedin.com/in/ssohaib1)
